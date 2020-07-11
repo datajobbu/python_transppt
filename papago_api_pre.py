@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import urllib.request
 
 papago_nmt_id = sys.argv[1]
