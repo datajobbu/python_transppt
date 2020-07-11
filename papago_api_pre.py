@@ -3,12 +3,12 @@ import sys
 import json
 import urllib.request
 
-papago_nmt_id = ""
-papago_nmt_secret = ""
+papago_nmt_id = sys.argv[1]
+papago_nmt_secret = sys.argv[2]
+#papago_detect_id = sys.argv[3]
+#papago_detect_secret = sys.argv[4]
 
-papago_detect_id = ""
-papago_detect_secret = ""
-
+'''
 #언어 감지
 def detect_language(txt):
     encQuery = urllib.parse.quote(txt)
@@ -27,6 +27,7 @@ def detect_language(txt):
         print(response_body.decode("utf-8"))
     else:
         print("Error Code:" + rescode)
+'''
 
 #번역
 def translate(txt):
@@ -50,5 +51,6 @@ def translate(txt):
 
 if __name__ == "__main__":
     txt = "HELLO! This is for ppt translation."
-    lang = detect_language(txt)
-    print(translate(txt))
+    #lang = detect_language(txt)
+    translate(txt)
+    #여기까지 호출량 35
