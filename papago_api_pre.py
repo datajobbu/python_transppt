@@ -1,15 +1,13 @@
 import os
-import sys
+import ssl
+import json
 import urllib.request
 
-papago_nmt_id = sys.argv[1]
-papago_nmt_secret = sys.argv[2]
-#papago_detect_id = sys.argv[3]
-#papago_detect_secret = sys.argv[4]
-
 '''
-#언어 감지
 def detect_language(txt):
+    """언어감지"""
+    #papago_detect_id = 
+    #papago_detect_secret =
     encQuery = urllib.parse.quote(txt)
     data = "query=" + encQuery
 
@@ -28,28 +26,25 @@ def detect_language(txt):
         print("Error Code:" + rescode)
 '''
 
-#번역
-def translate(txt):
+def translate(txt, nmt_id, nmt_pw):
+    """번역"""
     encText = urllib.parse.quote(txt)
     data = "source=en&target=ko&text=" + encText
     
     url = "https://openapi.naver.com/v1/papago/n2mt"
     
     request = urllib.request.Request(url)
-    request.add_header("X-Naver-Client-Id",papago_nmt_id)
-    request.add_header("X-Naver-Client-Secret",papago_nmt_secret)
-    response = urllib.request.urlopen(request, data=data.encode("utf-8"))
-    
+    request.add_header("X-Naver-Client-Id", nmt_id)
+    request.add_header("X-Naver-Client-Secret", nmt_pw)
+    res_ssl = ssl._create_unverified_context()
+    response = urllib.request.urlopen(request, data=data.encode("utf-8"), context=res_ssl)
     rescode = response.getcode()
+
     if(rescode==200):
         response_body = response.read()
-        print(response_body.decode('utf-8'))
+        
+        res = json.loads(response_body.decode('utf-8'))
+        return(res['message']['result']['translatedText'])
+
     else:
-        print("Error Code:" + rescode)
-
-
-if __name__ == "__main__":
-    txt = "HELLO! This is for ppt translation."
-    #lang = detect_language(txt)
-    translate(txt)
-    #여기까지 호출량 35
+        return("Error Code:" + rescode) 
