@@ -10,10 +10,10 @@ python3 ppt_translate.py [파일 경로/파일명] [파파고 API 아이디] [�
 ## 실행 예시
 **BEFORE**
 
-|![before1](./examples/b1.png)|![before2](./examples/b2.png)|
+|![before1](./img/b1.png)|![before2](./img/b2.png)|
 |-----------------------------|-----------------------------|
 
 **AFTER**
 
-|![after1](./examples/a1.png)|![after2](./examples/a2.png)|
+|![after1](./img/a1.png)|![after2](./img/a2.png)|
 |----------------------------|----------------------------|
