@@ -3,11 +3,16 @@ import ssl
 import json
 import urllib.request
 
-'''
-def detect_language(txt):
+import os
+import ssl
+import json
+import urllib.request
+
+
+def detect_language(txt, dtl_id, dtl_pw):
     """언어감지"""
-    #papago_detect_id = 
-    #papago_detect_secret =
+    papago_detect_id = dtl_id
+    papago_detect_secret = dtl_pw
     encQuery = urllib.parse.quote(txt)
     data = "query=" + encQuery
 
@@ -16,20 +21,32 @@ def detect_language(txt):
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id",papago_detect_id)
     request.add_header("X-Naver-Client-Secret",papago_detect_secret)
-    response = urllib.request.urlopen(request, data=data.encode("utf-8"))
+    res_ssl = ssl._create_unverified_context()
+    response = urllib.request.urlopen(request, data=data.encode("utf-8"), context=res_ssl)
     
     rescode = response.getcode()
+
     if(rescode==200):
         response_body = response.read()
-        print(response_body.decode("utf-8"))
+        
+        res = json.loads(response_body.decode('utf-8'))
+        return(res['langCode'])
+
     else:
         print("Error Code:" + rescode)
-'''
 
-def translate(txt, nmt_id, nmt_pw):
+
+def translate(txt, tp, nmt_id, nmt_pw):
     """번역"""
+    if tp == "0":
+        src = "en"
+        tgt = "ko"
+    elif tp == "1":
+        src = "ko"
+        tgt = "en"
+    
     encText = urllib.parse.quote(txt)
-    data = "source=en&target=ko&text=" + encText
+    data = "source=" + src + "&target=" + tgt + "&text=" + encText
     
     url = "https://openapi.naver.com/v1/papago/n2mt"
     
@@ -47,4 +64,9 @@ def translate(txt, nmt_id, nmt_pw):
         return(res['message']['result']['translatedText'])
 
     else:
-        return("Error Code:" + rescode) 
+        return("Error Code:" + rescode)
+
+
+if __name__ == "__main__":
+    txt = "안녕 July?"
+    detect_language(txt)
