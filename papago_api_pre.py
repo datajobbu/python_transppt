@@ -3,19 +3,10 @@ import ssl
 import json
 import urllib.request
 
-
-def translate(txt, tp, nmt_id, nmt_pw):
+def translate(txt, nmt_id, nmt_pw):
     """번역"""
-    if tp == "0":
-        src = "en"
-        tgt = "ko"
-
-    elif tp == "1":
-        src = "ko"
-        tgt = "en"
-    
     encText = urllib.parse.quote(txt)
-    data = "source=" + src + "&target=" + tgt + "&text=" + encText
+    data = "source=en&target=ko&text=" + encText
     
     url = "https://openapi.naver.com/v1/papago/n2mt"
     
@@ -33,4 +24,4 @@ def translate(txt, tp, nmt_id, nmt_pw):
         return(res['message']['result']['translatedText'])
 
     else:
-        return("Error Code:" + rescode)
+        return("Error Code:" + rescode) 

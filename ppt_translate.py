@@ -13,30 +13,34 @@ from papago_api_pre import translate
 def input_analyzer():
     try:
         full_name = sys.argv[1]
-        lang_type = sys.argv[2]
-        nmt_id = sys.argv[3]
-        nmt_pw = sys.argv[4]
+        nmt_id = sys.argv[2]
+        nmt_pw = sys.argv[3]
         
         temp_list = full_name.split('/')
         file_name = temp_list.pop()
         temp_list.append("")
         path = "/".join(temp_list)
 
-        return path, file_name, lang_type, nmt_id, nmt_pw
+        return path, file_name, nmt_id, nmt_pw
 
     except:
         print("Input Error")
         sys.exit()
 
 
-def ppt_translator(prs, tp, nmt_id, nmt_pw):
+def ppt_translator(prs, nmt_id, nmt_pw):
     for slide in prs.slides:
         for shape in slide.shapes:
             if not shape.has_text_frame:
                 continue
 
             for paragraph in shape.text_frame.paragraphs:
-                translated = translate(paragraph.text, tp, nmt_id, nmt_pw)
+                content = paragraph.text
+                trimmed = ' '.join(content.split())
+                if not trimmed:
+                    continue
+                
+                translated = translate(trimmed, nmt_id, nmt_pw)
                 paragraph.clear()
                 
                 run = paragraph.add_run()
@@ -44,10 +48,10 @@ def ppt_translator(prs, tp, nmt_id, nmt_pw):
 
 
 def main():
-    _path, _filename, _tp, _id, _pw = input_analyzer()
+    _path, _filename, _id, _pw = input_analyzer()
     print('Ready..')
     prs = Presentation(_path + _filename)
-    ppt_translator(prs, _tp, _id, _pw)
+    ppt_translator(prs, _id, _pw)
     prs.save(_path+"translated_"+_filename)
     print('Done!')
     
